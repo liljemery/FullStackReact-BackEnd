@@ -60,7 +60,7 @@ app.put('/api/articles/:name/downvote', async (req, res)=>{
     }
 })
 
-app.post('/api/articles/:name/comments', async (req,res,next)=>{
+app.post('/api/articles/:name/comments', async (req,res)=>{
     const { name } = req.params
     const { postedBy, text } = req.body;
 
