@@ -5,6 +5,10 @@ const  app = express();
 app.use(express.json());
 var port = 8000;
 
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    next();
+});
 
 app.get('/api/articles/:name', async (req,res)=>{
     const {name} = req.params;
