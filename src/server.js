@@ -8,8 +8,9 @@ var port = 8000;
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
+    res.setHeader(    "Access-Control-Allow-Headers", "X-Requested-With, content-type, Authorization")
     next();
-  });
+});
 
 app.get('/api/articles/:name', async (req,res)=>{
     const {name} = req.params;
@@ -59,7 +60,7 @@ app.put('/api/articles/:name/downvote', async (req, res)=>{
     }
 })
 
-app.post('/api/articles/:name/comments', async (req,res)=>{
+app.post('/api/articles/:name/comments', async (req,res,next)=>{
     const { name } = req.params
     const { postedBy, text } = req.body;
 
@@ -70,7 +71,7 @@ app.post('/api/articles/:name/comments', async (req,res)=>{
     const article = await db.collection('articles').findOne({ name })
 
     if(article){
-        res.send(article.comments)
+        res.json(article)
     }else{
         res.send(`This Article doesnt exist`)
     }
