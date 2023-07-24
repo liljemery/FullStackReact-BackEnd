@@ -7,8 +7,9 @@ var port = 8000;
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
     next();
-});
+  });
 
 app.get('/api/articles/:name', async (req,res)=>{
     const {name} = req.params;
@@ -35,11 +36,27 @@ app.put('/api/articles/:name/upvote', async (req, res)=>{
     const article = await db.collection('articles').findOne({name})
 
      if (article){
-        const { upvotes } = article;
-        res.send(` The article now has ${upvotes} upvotes`)
+        res.send(article)
      }else{
         res.send(`This article doesn't exist!`)
      }
+})
+
+app.put('/api/articles/:name/downvote', async (req, res)=>{
+    const { name } = req.params;
+
+
+       await db.collection('articles').updateOne({ name }, {
+           $inc: {upvotes: -1},
+       })
+
+   const article = await db.collection('articles').findOne({name})
+
+    if (article){
+       res.send(article)
+    }else{
+       res.send(`This article doesn't exist!`)
+    }
 })
 
 app.post('/api/articles/:name/comments', async (req,res)=>{
