@@ -30,9 +30,9 @@ app.put('/api/articles/:name/upvote', async (req, res)=>{
      const { name } = req.params;
 
 
-        await db.collection('articles').updateOne({ name }, {
-            $inc: {upvotes: 1},
-        })
+    await db.collection('articles').updateOne({ name }, {
+        $inc: {upvotes: 1},
+    })
 
     const article = await db.collection('articles').findOne({name})
 
@@ -47,9 +47,9 @@ app.put('/api/articles/:name/downvote', async (req, res)=>{
     const { name } = req.params;
 
 
-       await db.collection('articles').updateOne({ name }, {
-           $inc: {upvotes: -1},
-       })
+    await db.collection('articles').updateOne({ name }, {
+        $inc: {upvotes: -1},
+    })
 
    const article = await db.collection('articles').findOne({name})
 
