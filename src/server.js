@@ -1,10 +1,17 @@
-import express from "express";
-import {db, DBconnection} from './db.js'
-import cors from 'cors';
 import fs from 'fs';
+import path from 'path';
+import cors from 'cors';
+import express from "express";
 import admin from 'firebase-admin';
+import { fileURLToPath } from "url";
+import {db, DBconnection} from './db.js'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
 const  app = express();
 app.use(express.json());
+app.use(express.static(path.join(__dirname,'../dist')))
 //Initializes cors module.
 app.use(cors());
 var port = 8000;
@@ -17,6 +24,10 @@ const credentials =  JSON.parse(
 //Initializes App with firebase credentials.
 admin.initializeApp({
     credential: admin.credential.cert(credentials),
+})
+
+app.get(/^(?!\/api).*/, (req,res)=>{
+    res.sendFile(path.join(__dirname, '../dist/inde.html'))
 })
 
 //Requests user ID from url parameters
@@ -145,6 +156,6 @@ app.post('/api/articles/:name/comments', async (req,res)=>{
 DBconnection( () => {
     console.log('Succesfully connected to database!')
     app.listen(port, ()=>{
-        console.log(`server is listening to http://localhost:${port}`)
+        console.log(`server is listening to http://localhost:${port}/`)
      });
 })
