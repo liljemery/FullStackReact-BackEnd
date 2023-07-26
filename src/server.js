@@ -39,10 +39,12 @@ app.use( async (req,res,next) =>{
     next();
 });
 
+
 //Calls article content from Database
 app.get('/api/articles/:name', async (req,res)=>{
     //Requests user name from url parameters
     const { name } = req.params;
+
     //Requests user ID
     const { uid } = req.user;
 
@@ -51,8 +53,10 @@ app.get('/api/articles/:name', async (req,res)=>{
 
     //if article exists verify if user can upvote
     if(article){
+        //Requests upvotes ID array
         const upvoteIDs = article.upvoteIDs || [];
-
+        // User will be able to upvote if his upvote isn't already
+        // on upvote array
         article.canUpvote = uid && !upvoteIDs.includes(uid);
 
         res.json(article)
@@ -79,14 +83,14 @@ app.put('/api/articles/:name/upvote', async (req, res)=>{
     //Requests user ID
      const {uid} = req.user;
 
-    //Searches article to database
+    //Searches article in database
      const article = await db.collection("articles").findOne({ name });
 
     //validate article exists!
      if(article){
         //Requests upvotes ID array
          const upvoteIDs = article.upvoteIDs || [];
-        // User will be able to upvote if his upvote is allready
+        // User will be able to upvote if his upvote isn't already
         // on upvote array
          const canUpvote = uid && !upvoteIDs.includes(uid);
 
