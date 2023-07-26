@@ -21,19 +21,21 @@ admin.initializeApp({
 
 //Requests user ID from url parameters
 app.use( async (req,res,next) =>{
-    const { authToken } = req.headers;
+    const { authtoken } = req.headers;
 
-    if(authToken){
+    if(authtoken){
         try{
 
-            req.user = await admin.auth().verifyIdToken(authToken);
+            req.user = await admin.auth().verifyIdToken(authtoken);
 
         }catch(e){
 
-            res.sendStatus(400)
+            return res.sendStatus(400)
 
         }
     }
+    req.user = req.user || {};
+
     next();
 });
 
@@ -51,7 +53,7 @@ app.get('/api/articles/:name', async (req,res)=>{
     if(article){
         const upvoteIDs = article.upvoteIDs || [];
 
-        article.canUpvote = uid && !upvoteIDs.include(uid);
+        article.canUpvote = uid && !upvoteIDs.includes(uid);
 
         res.json(article)
     }else{
@@ -86,7 +88,7 @@ app.put('/api/articles/:name/upvote', async (req, res)=>{
          const upvoteIDs = article.upvoteIDs || [];
         // User will be able to upvote if his upvote is allready
         // on upvote array
-         const canUpvote = uid && !upvoteIDs.include(uid);
+         const canUpvote = uid && !upvoteIDs.includes(uid);
 
             //If user can upvote, do so
             if(canUpvote){
