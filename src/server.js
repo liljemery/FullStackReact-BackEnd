@@ -1,6 +1,16 @@
 import express from "express";
 import {db, DBconnection} from './db.js'
-import cors from 'cors'
+import cors from 'cors';
+import fs from 'fs';
+import admin from 'firebase-admin';
+
+const credentials =  JSON.parse(
+    fs.readFileSync('./credentials.json')
+)
+
+admin.initializeApp({
+    credential: admin.credential.cert(credentials),
+})
 
 const  app = express();
 app.use(express.json());
@@ -8,6 +18,7 @@ app.use(cors());
 var port = 8000;
 
 
+//Calls article content from Database
 app.get('/api/articles/:name', async (req,res)=>{
     const {name} = req.params;
 
@@ -22,6 +33,7 @@ app.get('/api/articles/:name', async (req,res)=>{
 })
 
 
+//Submits one upvote for the article
 app.put('/api/articles/:name/upvote', async (req, res)=>{
      const { name } = req.params;
 
