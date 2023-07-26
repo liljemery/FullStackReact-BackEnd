@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname,'../dist')))
 //Initializes cors module.
 app.use(cors());
-var port = 8000;
+var port = process.env.PORT || 8000;
 
 //Locate firebase credentials
 const credentials =  JSON.parse(
