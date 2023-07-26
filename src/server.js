@@ -110,21 +110,23 @@ app.put('/api/articles/:name/upvote', async (req, res)=>{
 
 //Submit a comment to the post
 app.post('/api/articles/:name/comments', async (req,res)=>{
-    //Requests article name from URL parameters
+    //Requests article name from Request parameters
     const { name } = req.params;
 
-    //Requests comment body from URL parameters
+    //Requests comment body from Request parameters
     const { text } = req.body;
     
-    //Requests email address from URL parameters
+    //Requests email address from Request parameters
     const { email } = req.user;
 
+    //Testing front end receivables
+    // console.log(email,text)
 
     //Post comment to database
     await db.collection('articles').updateOne({ name }, {
-        $push: {comments : {email, text} },
+        $push: {comments : {postedBy: email, text: text} },
     })
-
+    
     //Searches article updated from database
     const article = await db.collection('articles').findOne({ name })
 
