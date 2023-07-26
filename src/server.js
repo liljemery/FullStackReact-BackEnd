@@ -6,9 +6,9 @@ app.use(express.json());
 var port = 8000;
 
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5174');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
-    res.setHeader(    "Access-Control-Allow-Headers", "X-Requested-With, content-type, Authorization")
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With, content-type, Authorization')
     next();
 });
 
@@ -43,22 +43,6 @@ app.put('/api/articles/:name/upvote', async (req, res)=>{
      }
 })
 
-app.put('/api/articles/:name/downvote', async (req, res)=>{
-    const { name } = req.params;
-
-
-    await db.collection('articles').updateOne({ name }, {
-        $inc: {upvotes: -1},
-    })
-
-   const article = await db.collection('articles').findOne({name})
-
-    if (article){
-       res.send(article)
-    }else{
-       res.send(`This article doesn't exist!`)
-    }
-})
 
 app.post('/api/articles/:name/comments', async (req,res)=>{
     const { name } = req.params
