@@ -2,7 +2,7 @@ import express from "express";
 import {db, DBconnection} from './db.js'
 import cors from 'cors';
 import fs from 'fs';
-import admin, { auth } from 'firebase-admin';
+import admin from 'firebase-admin';
 const  app = express();
 app.use(express.json());
 //Initializes cors module.
