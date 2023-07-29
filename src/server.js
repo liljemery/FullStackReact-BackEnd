@@ -27,7 +27,7 @@ admin.initializeApp({
 })
 
 app.get(/^(?!\/api).*/, (req,res)=>{
-    res.sendFile(path.join(__dirname, '../dist/inde.html'))
+    res.sendFile(path.join(__dirname, '../dist/index.html'))
 })
 
 //Requests user ID from url parameters
